@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 //script c/o Elisa
 
 public class MenuController : MonoBehaviour {
@@ -12,11 +13,21 @@ public class MenuController : MonoBehaviour {
 	public enum menu {about, audio, cinematics, help, main, settings}; 
 	public menu current;
 
+	//Audio
+	public AudioMixer masterMixer;
+	public AudioMixerSnapshot masterOff, masterOn, sfxOff, sfxOn, cinematics;
+	bool masterAudioOn = true;
+	bool soundfxOn = true;
+	float BGVolValue, SFXVolValue;
+	public AudioSource mainMusic;
+
+
 	void Start()
 	{
 		//if !newPlayer
 		current = menu.main;
 		//if newPlayer, then current = menu.cinematics;
+		mainMusic.Play ();
 	}
 
 	void Update()
@@ -92,6 +103,7 @@ public class MenuController : MonoBehaviour {
 	public void OnCinematicsClick()
 	{
 		current = menu.cinematics;
+		cinematics.TransitionTo (0.01f);
 	}
 
 	public void OnHelpClick()
@@ -108,4 +120,67 @@ public class MenuController : MonoBehaviour {
 		Application.LoadLevel (1);
 	}
 
+	public void MuteMasterAudio()
+	{
+		if (masterAudioOn)
+		{
+			masterOff.TransitionTo (0.01f);
+			masterAudioOn = false;
+			Debug.Log("Background Music is off");
+		}
+		else
+		{
+			masterOn.TransitionTo(0.01f);
+			masterAudioOn = true;
+			Debug.Log("Background Music is on");
+		}
+		Debug.Log ("BGVol value is " + BGVolValue);
+	}
+
+	public void MuteSfxAudio()
+	{
+		if (soundfxOn)
+		{
+			sfxOff.TransitionTo (0.01f);
+			soundfxOn = false;
+		}
+		else
+		{
+			sfxOn.TransitionTo(0.01f);
+			soundfxOn = true;
+		}
+		Debug.Log ("SFXVol value is " + SFXVolValue); 
+	}
+
+	public void OnCinematicsClose()
+	{
+		if (masterAudioOn)
+		{
+			masterOn.TransitionTo (0.01f);
+			masterAudioOn = true;
+			Debug.Log("Background Music is on");
+		}
+		else
+		{
+			masterOff.TransitionTo (0.01f);
+			masterAudioOn = false;
+			Debug.Log("Background Music is off");
+		}
+		Debug.Log ("BGVol value is " + BGVolValue);
+
+		if (soundfxOn)
+		{
+			sfxOn.TransitionTo (0.01f);
+			soundfxOn = true;
+			Debug.Log("Sound Effects is on");
+		}
+		else
+		{
+			sfxOff.TransitionTo (0.01f);
+			soundfxOn = false;
+			Debug.Log("Sound Effects is off");
+		}
+		Debug.Log ("SFXVol value is " + SFXVolValue); 
+		current = menu.main;
+	}
 }
