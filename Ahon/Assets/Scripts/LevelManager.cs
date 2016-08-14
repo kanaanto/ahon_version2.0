@@ -12,7 +12,7 @@ public class LevelManager : MonoBehaviour {
 		public int Unlocked;
 		public bool IsInteractable;
 		
-		public Button.ButtonClickedEvent OnClickEvent;
+		//public Button.ButtonClickedEvent OnClickEvent;
 	}
 	public GameObject levelButton;
 	public Transform Spacer;
@@ -45,26 +45,32 @@ public class LevelManager : MonoBehaviour {
 			
 			button.unlocked = level.Unlocked;
 			button.GetComponent<Button>().interactable = level.IsInteractable;
+			button.GetComponent<Button>().onClick.AddListener(() => loadLevels("Level" + button.LevelText.text));
+			
+			if(PlayerPrefs.GetInt("Level" + button.LevelText.text + "_score") > 0);
 			
 			newbutton.transform.SetParent(Spacer);
 		}
 		SaveAll();
 	}
 	
-	void SaveAll(){
-		//	if(PlayerPrefs.HasKey("Level1")){
-		//		return;
-		//	}else{
-		
-		GameObject[] allButtons = GameObject.FindGameObjectsWithTag("LevelButton");
-		foreach (GameObject buttons in allButtons){
-			LevelButton button = buttons.GetComponent<LevelButton>();
-			PlayerPrefs.SetInt ("Level" + button.LevelText.text, button.unlocked);
+	void SaveAll()
+	{
+		{
+			GameObject[] allButtons = GameObject.FindGameObjectsWithTag ("LevelButton");
+			foreach (GameObject buttons in allButtons) 
+			{
+				LevelButton button = buttons.GetComponent<LevelButton> ();
+				PlayerPrefs.SetInt ("Level" + button.LevelText.text, button.unlocked);
+			}
 		}
 	}
-	//}
 	
 	void DeleteAll(){
 		PlayerPrefs.DeleteAll ();
+	}
+	
+	void loadLevels(string value){
+		Application.LoadLevel (value);
 	}
 }
