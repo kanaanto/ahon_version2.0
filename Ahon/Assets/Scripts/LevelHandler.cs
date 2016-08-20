@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 
-public class LevelManager : MonoBehaviour {
+public class LevelHandler : MonoBehaviour {
 	
 	[System.Serializable]
 	public class Level{
