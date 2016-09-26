@@ -10,8 +10,8 @@ namespace Assets.Scripts.Behaviour
 	class CalamityTimer : MonoBehaviour
 	{
 		//Calamity UI
-		public float calamityTimeRemaining; //NOTE: in original project, this value is fetched from the database
-		public float calamityTimeToComplete; //NOTE: in original project, this value is fetched from the database
+		public float calamityTimeRemaining = 30f; //NOTE: in original project, this value is fetched from the database
+		public float calamityTimeToComplete = 10f; //NOTE: in original project, this value is fetched from the database
 		public Image calamity;
 		public Image duration;
 
