@@ -28,6 +28,11 @@ public class LevelHandler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		//added 09.30 by Elisa
+		//meant to quit game on android back button press
+		if (Input.GetKeyDown (KeyCode.Escape))
+			Application.Quit ();
 		
 	}
 	

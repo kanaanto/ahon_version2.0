@@ -10,6 +10,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.Audio;
 
 namespace Assets.Scripts.Behaviour
 {
@@ -17,6 +18,9 @@ namespace Assets.Scripts.Behaviour
 	{
 		private GameObject PauseWindow;
 		private Boolean isPaused;
+
+		//added by Elisa
+		public AudioMixerSnapshot paused, unpaused;
 
 		void Awake(){
 			//PauseWindow = GameObject.FindGameObjectWithTag ("PauseWindow");
@@ -29,12 +33,43 @@ namespace Assets.Scripts.Behaviour
 		}
 
 		void Update(){
-			if(Input.GetKeyDown(KeyCode.Escape)){
-				if(!PauseWindow.activeInHierarchy && isPaused == false){
-					PauseWindow.SetActive(true);
-					Time.timeScale = 0;
+			if(Input.GetKeyDown(KeyCode.Escape))
+			{
+				if(!PauseWindow.activeInHierarchy && isPaused == false)
+				{
+					//added by Elisa 09.30
 					isPaused = true;
+					PauseWindow.SetActive(true);
+					pauseGame();
+					//commented out by Elisa 09.30
+//					Time.timeScale = 0;
+//					isPaused = true;
 				}
+				//added by Elisa 09.30
+				else
+				{
+					Application.Quit();
+				}
+			}
+		}
+
+		//added by Elisa 09.30
+		void pauseGame ()
+		{
+			Time.timeScale = Time.timeScale == 0 ? 1 : 0;
+			lowPass();
+		}
+
+		//added by Elisa 09.30
+		void lowPass ()
+		{
+			if (Time.timeScale == 0)
+			{
+				paused.TransitionTo (.01f);
+			}
+			else
+			{
+				unpaused.TransitionTo(.01f);
 			}
 		}
 

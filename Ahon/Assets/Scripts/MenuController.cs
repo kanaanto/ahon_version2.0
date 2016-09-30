@@ -83,6 +83,11 @@ public class MenuController : MonoBehaviour {
 			settingsM.SetActive(true);
 			break;
 		}
+
+		//added 09.30 by Elisa
+		//meant to quit game on android back button press
+		if (Input.GetKeyDown (KeyCode.Escape))
+			Application.Quit ();
 	}
 
 	public void OnStartScene()
