@@ -2,12 +2,13 @@
 using System.Collections;
 using Assets.Scripts.Classes;
 using Assets.Scripts.DataSource;
+using UnityEngine.EventSystems;
 // c/o Elisa
 // to be attached to GameObject where pinch zoom function is to be implemented
 
 namespace Assets.Scripts.Behaviour
 {
-	class PinchZoom : MonoBehaviour
+	class PinchZoom : MonoBehaviour, IPointerClickHandler
 	{
 		private float scale_factor= 0.07f;  
 		private float MAXSCALE = 6.0f, MIN_SCALE = 0.6f; // zoom-in and zoom-out limits
@@ -31,6 +32,18 @@ namespace Assets.Scripts.Behaviour
 			originalPos = transform.position;
 			isMousePressed = false;
 		}
+
+		#region IPointerClickHandler implementation
+
+
+		public void OnPointerClick (PointerEventData eventData)
+		{
+			Debug.Log ("some item clicked");
+		}
+
+
+		#endregion
+
 		void Update ()
 		{
 			if(Input.GetMouseButtonDown(0))

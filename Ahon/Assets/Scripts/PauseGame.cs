@@ -23,7 +23,7 @@ namespace Assets.Scripts.Behaviour
 		public AudioMixerSnapshot paused, unpaused;
 
 		void Awake(){
-			//PauseWindow = GameObject.FindGameObjectWithTag ("PauseWindow");
+//			PauseWindow = GameObject.FindGameObjectWithTag ("PauseWindow");
 			PauseWindow = transform.FindChild ("PanelPause").gameObject as GameObject;
 		}
 		 
@@ -93,7 +93,12 @@ namespace Assets.Scripts.Behaviour
 
 		public void OnLevelSelectionButtonClicked(){
 			Time.timeScale = 1;
-			Application.LoadLevel("LevelSelection");
+			Application.LoadLevel("Level Selection");
+		}
+		public void OnPlayNextLevelButtonClicked()
+		{
+			Time.timeScale = 1;
+			Application.LoadLevel(Application.loadedLevel + 1);
 		}
 
 		public void sampleCode(){
