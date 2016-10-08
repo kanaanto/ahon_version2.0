@@ -24,8 +24,9 @@ public class MenuController : MonoBehaviour {
 
 	void Start()
 	{
-		//if !newPlayer
-		current = menu.main;
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        //if !newPlayer
+        current = menu.main;
 		//if newPlayer, then current = menu.cinematics;
 		mainMusic.Play ();
 	}
