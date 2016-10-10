@@ -15,14 +15,19 @@ namespace Assets.Scripts.Behaviour
 		public Image duration;
         bool hasCalamityStarted;
         private Transform playerTransform;
-        Animator floodAnimator;
+        public Animator floodAnimator;
         public GameObject gameOverPanel;
         public GameObject successPanel;
+		public GameObject goalPanel;
+		bool goalClosed;
+		bool isFlooding;
 
         void Start()
 		{
             hasCalamityStarted = false;
-            calamityTimeRemaining = 30;
+			goalClosed = false;
+			isFlooding = false;
+            calamityTimeRemaining = 15;
             calamityTimeToComplete = 10;
             playerTransform = GameObject.Find("Flood").GetComponent<Transform>();
             floodAnimator = playerTransform.gameObject.GetComponent<Animator>();
@@ -30,45 +35,44 @@ namespace Assets.Scripts.Behaviour
 
 		void Update()
 		{
-            if (calamityTimeRemaining > 0.0f)
-            {
+			if (goalClosed)
+			{
+				if (calamityTimeRemaining > 0.0f) {
+					calamity.fillAmount = Mathf.MoveTowards (calamity.fillAmount, 1.0f, (Time.deltaTime / calamityTimeRemaining) / 4f);
+					calamityTimeRemaining -= Time.deltaTime;
+				} else {
+					if (calamityTimeToComplete > 0.0f) {
+						int checker_1 = (int)calamityTimeToComplete;
 
-                calamity.fillAmount = Mathf.MoveTowards(calamity.fillAmount, 1.0f, (Time.deltaTime / calamityTimeRemaining) / 4f);
-                calamityTimeRemaining -= Time.deltaTime;
-            }
-            else
-            {
-                if (calamityTimeToComplete > 0.0f)
-                {
-                    int checker_1 = (int)calamityTimeToComplete;
+						duration.fillAmount = Mathf.MoveTowards (duration.fillAmount, 1.0f, (Time.deltaTime / calamityTimeToComplete) / 4f);
+						calamityTimeToComplete -= Time.deltaTime;
+						//Debug.Log("calamityTimeToComplete - " + calamityTimeToComplete);
 
-                    duration.fillAmount = Mathf.MoveTowards(duration.fillAmount, 1.0f, (Time.deltaTime / calamityTimeToComplete) / 4f);
-                    calamityTimeToComplete -= Time.deltaTime;
-                    //Debug.Log("calamityTimeToComplete - " + calamityTimeToComplete);
+						int checker_2 = (int)calamityTimeToComplete;
+						if (checker_1 != checker_2 ) {
+							hasCalamityStarted = true;
+							StartFlood ();
+						}
 
-                    int checker_2 = (int)calamityTimeToComplete;
-                    if (checker_1 != checker_2 && !hasCalamityStarted)
-                    {
-                        hasCalamityStarted = true;
-                        StartFlood();
-                    }
-
-                }
-                else
-                {
-                    EndFlood();
-                    ShowGameOverPanel("success");
-                }
-            }
+					} else {
+						EndFlood ();
+						ShowGameOverPanel ("success");
+					}
+				}
+			}
         }
         public void StartFlood()
         {
-            floodAnimator.runtimeAnimatorController = Resources.Load("Flood") as RuntimeAnimatorController;
+			isFlooding = true;
+			//floodAnimator.runtimeAnimatorController = Resources.Load("Flood") as RuntimeAnimatorController;
+			floodAnimator.Play ("flood");
         }
 
         public void EndFlood()
         {
-            floodAnimator.runtimeAnimatorController = null;
+			isFlooding = false;
+			//floodAnimator.runtimeAnimatorController = null;
+			floodAnimator.enabled = false;
         }
 
         public void ShowGameOverPanel(string type)
@@ -84,6 +88,12 @@ namespace Assets.Scripts.Behaviour
             }
 
         }
+
+		public void closeGoal()
+		{
+			goalPanel.SetActive (false);
+			goalClosed = true;
+		}
 
     }
 }
