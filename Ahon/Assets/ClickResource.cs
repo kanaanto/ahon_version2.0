@@ -14,18 +14,20 @@ namespace Assets.Scripts.Behaviour
         private float basePlantScore, basePeopleScore, baseBuildScore = 21;
         private int currentBuildIndex = 0;
 		private int currentPlantIndex = 0;
-		
+
+		private bool isGameSuccess;
+
 		[SerializeField]
 		GameObject[] build;
 		
 		[SerializeField]
 		GameObject[] plant;
-		
 		public void Build()
 		{
 			currentBuildIndex = (currentBuildIndex + 1) % build.Length;
 			//currentBuildIndex += 1;
 			//currentBuildIndex++;
+			isGameSuccess = false;
 			build[currentBuildIndex].SetActive(true);
             ManipulateScore("build");
             ManipulateScore("people");
@@ -80,8 +82,31 @@ namespace Assets.Scripts.Behaviour
                     }
                     break;
             }
-
+			SetGameSuccess ();
         }
+
+
+		public void SetGameSuccess(){
+			Debug.Log ("> basePlantScore " + basePlantScore);
+			Debug.Log ("> basePeopleScore " + basePeopleScore);
+			Debug.Log ("> baseBuildScore " + baseBuildScore);
+			if(basePlantScore >= 140 &&
+			        basePeopleScore >= 140 &&
+			        baseBuildScore >= 140){
+				isGameSuccess = true;
+			} else {
+				isGameSuccess = false; 
+			}
+			Debug.Log ("> " + isGameSuccess);
+			PlayerPrefs.SetString("GameSuccess", isGameSuccess.ToString());
+			PlayerPrefs.SetInt ("PeopleScore", Mathf.RoundToInt ((float)basePeopleScore * 10));
+			PlayerPrefs.SetInt ("PlantScore", Mathf.RoundToInt ((float)basePlantScore * 10));
+			PlayerPrefs.SetInt ("BuildScore", Mathf.RoundToInt ((float)baseBuildScore * 10));
+			PlayerPrefs.SetInt ("TotalScore", Mathf.RoundToInt ((float)(basePeopleScore + 
+			                                                            basePlantScore + 
+			                                                            baseBuildScore)));
+		}
+
     }
 }
 
