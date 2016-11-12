@@ -19,6 +19,8 @@ namespace Assets.Scripts.Behaviour
         public GameObject gameOverPanel;
         public GameObject successPanel;
 		public GameObject goalPanel;
+
+		private static bool isGameSuccess;
 		bool goalClosed;
 		bool isFlooding;
 
@@ -27,6 +29,7 @@ namespace Assets.Scripts.Behaviour
             hasCalamityStarted = false;
 			goalClosed = false;
 			isFlooding = false;
+			isGameSuccess = false;
             calamityTimeRemaining = 15;
             calamityTimeToComplete = 10;
             playerTransform = GameObject.Find("Flood").GetComponent<Transform>();
@@ -56,7 +59,13 @@ namespace Assets.Scripts.Behaviour
 
 					} else {
 						EndFlood ();
-						ShowGameOverPanel ("success");
+						isGameSuccess = Boolean.Parse(PlayerPrefs.GetString("GameSuccess"));
+
+						if(isGameSuccess){
+							ShowGameOverPanel ("success");
+						} else {
+							ShowGameOverPanel ("-1");
+						}
 					}
 				}
 			}
@@ -77,16 +86,31 @@ namespace Assets.Scripts.Behaviour
 
         public void ShowGameOverPanel(string type)
         {
+			int peopleScore = PlayerPrefs.GetInt("PeopleScore");
+			int plantScore = PlayerPrefs.GetInt("PlantScore");
+			int buildScore = PlayerPrefs.GetInt("BuildScore");
+			int totalScore = PlayerPrefs.GetInt("TotalScore");
             if (type.Equals("success"))
             {
                 //gameOver = transform.FindChild("PanelGameOver").gameObject as GameObject;
                 //gameOver = GameObject.Find("PanelPause").GetComponent<GameObject>();
                 successPanel.SetActive(true);
+			
+				Text peopleScoreText = GameObject.Find("SuccessPeopleScore").GetComponent<Text>();
+				peopleScoreText.text = peopleScore.ToString();
+				Text plantScoreText = GameObject.Find("SuccessPlantScore").GetComponent<Text>();
+				plantScoreText.text = plantScore.ToString();
+				Text buildScoreText = GameObject.Find("SuccessBuildScore").GetComponent<Text>();
+				buildScoreText.text = buildScore.ToString();
+				Text totalScoreText = GameObject.Find("SuccessTotalScore").GetComponent<Text>();
+				totalScoreText.text = totalScore.ToString();
+
             } else
             {
                 gameOverPanel.SetActive(true);
+				Text totalScoreText = GameObject.Find("FailTotalScore").GetComponent<Text>();
+				totalScoreText.text = totalScore.ToString();
             }
-
         }
 
 		public void closeGoal()
